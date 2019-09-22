@@ -3,7 +3,7 @@ package todolist.datamodel;
 import java.time.LocalDate;
 
 /**
- * Created by timbuchalka on 17/04/2016.
+ * Created by piotr on 17/07/2019.
  */
 public class TodoItem {
 
