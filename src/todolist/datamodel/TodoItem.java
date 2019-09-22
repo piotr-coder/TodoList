@@ -3,10 +3,10 @@ package todolist.datamodel;
 import java.time.LocalDate;
 
 /**
- * User: Blichu
- * Date: 02.07.19   Time: 10:52
+ * Created by timbuchalka on 17/04/2016.
  */
 public class TodoItem {
+
     private String shortDescription;
     private String details;
     private LocalDate deadline;
@@ -41,8 +41,8 @@ public class TodoItem {
         this.deadline = deadline;
     }
 
-    @Override
-    public String toString() {
-        return shortDescription;
-    }
+//    @Override
+//    public String toString() {
+//        return shortDescription;
+//    }
 }

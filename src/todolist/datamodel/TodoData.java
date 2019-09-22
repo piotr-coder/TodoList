@@ -1,6 +1,7 @@
 package todolist.datamodel;
 
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -11,41 +12,43 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
-import java.util.List;
 
 /**
- * User: Blichu
- * Date: 03.07.19   Time: 15:22
+ * Created by timbuchalka on 20/04/2016.
  */
 public class TodoData {
     private static TodoData instance = new TodoData();
     private static String filename = "TodoListItems.txt";
-    private List<TodoItem> todoItems;
+
+    private ObservableList<todolist.datamodel.TodoItem> todoItems;
     private DateTimeFormatter formatter;
-    public static TodoData getInstance(){
+
+    public static TodoData getInstance() {
         return instance;
     }
 
-    private TodoData(){
+    private TodoData() {
         formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     }
-    public List<TodoItem> getTodoItems() {
+
+    public ObservableList<todolist.datamodel.TodoItem> getTodoItems() {
         return todoItems;
     }
-//    public void setTodoItems(List<TodoItem> todoItems) {
-//        this.todoItems = todoItems;
-//    }
-    public void addTodoItem (String shortText, String description, LocalDate deadline){
-        todoItems.add(new TodoItem(shortText, description, deadline));
+
+    public void addTodoItem(todolist.datamodel.TodoItem item) {
+        todoItems.add(item);
     }
+
     public void loadTodoItems() throws IOException {
+
         todoItems = FXCollections.observableArrayList();
         Path path = Paths.get(filename);
         BufferedReader br = Files.newBufferedReader(path);
 
         String input;
+
         try {
-            while ((input = br.readLine()) != null){
+            while ((input = br.readLine()) != null) {
                 String[] itemPieces = input.split("\t");
 
                 String shortDescription = itemPieces[0];
@@ -53,28 +56,49 @@ public class TodoData {
                 String dateString = itemPieces[2];
 
                 LocalDate date = LocalDate.parse(dateString, formatter);
-                TodoItem todoItem = new TodoItem(shortDescription,details, date);
+                todolist.datamodel.TodoItem todoItem = new todolist.datamodel.TodoItem(shortDescription, details, date);
                 todoItems.add(todoItem);
             }
+
         } finally {
-            if(br != null) br.close();
+            if(br != null) {
+                br.close();
+            }
         }
     }
-    public void storeTodoItems() throws IOException{
+
+    public void storeTodoItems() throws IOException {
+
         Path path = Paths.get(filename);
         BufferedWriter bw = Files.newBufferedWriter(path);
         try {
-            Iterator<TodoItem> iter = todoItems.iterator();
-            while (iter.hasNext()){
-                TodoItem item = iter.next();
+            Iterator<todolist.datamodel.TodoItem> iter = todoItems.iterator();
+            while(iter.hasNext()) {
+                todolist.datamodel.TodoItem item = iter.next();
                 bw.write(String.format("%s\t%s\t%s",
                         item.getShortDescription(),
                         item.getDetails(),
                         item.getDeadline().format(formatter)));
                 bw.newLine();
             }
+
         } finally {
-            if(bw != null) bw.close();
+            if(bw != null) {
+                bw.close();
+            }
         }
     }
+
+    public void deleteTodoItem(todolist.datamodel.TodoItem item) {
+        todoItems.remove(item);
+    }
+
 }
+
+
+
+
+
+
+
+
